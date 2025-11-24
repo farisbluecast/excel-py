@@ -1,7 +1,4 @@
-fastapi
-uvicorn[standard]
-openpyxl
-httpx
+fastapi 
+uvicorn 
+openpyxl 
 asyncpg
-pydantic
-
