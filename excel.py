@@ -242,10 +242,10 @@ def create_excel_template(lookup_data, prefill_rows=1000):
                 for row in range(2, total_rows + 1):
                     # Build dynamic formula based on category columns
                     # Extract column letters to variables first
-                    category_start_plus1_col = get_column_letter(
-                        category_start_idx + 1)
-                    category_end_plus1_col = get_column_letter(
-                        category_end_idx + 1)
+                    # category_start_plus1_col = get_column_letter(
+                    #     category_start_idx + 1)
+                    # category_end_plus1_col = get_column_letter(
+                    #     category_end_idx + 1)
                     productivity_formula = f'''=IFERROR(
                         IF(
                             SUMPRODUCT((MOD(COLUMN({category_start_col}{row}:{category_end_col}{row})-{category_start_idx},3)=1)*IF(ISNUMBER({category_start_col}{row}:{category_end_col}{row}),{category_start_col}{row}:{category_end_col}{row},0))/8=0,
@@ -255,29 +255,31 @@ def create_excel_template(lookup_data, prefill_rows=1000):
                         ""
                     )'''
 
-                    formula = f"""=IFERROR(
-                        IF(
-                            SUMPRODUCT(
-                                (MOD(COLUMN({category_start_col}{row}:{category_end_col}{row}),3)=0)*
-                                IF(ISNUMBER({category_start_col}{row}:{category_end_col}{row}),{category_start_col}{row}:{category_end_col}{row},0),
-                                (MOD(COLUMN({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),3)=1)*
-                                IF(ISNUMBER({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),
-                                {category_start_plus1_col}{row}:{category_end_plus1_col}{row},0)
-                            )=0,
-                            "",
-                            SUMPRODUCT(
-                                (MOD(COLUMN({category_start_col}{row}:{category_end_col}{row}),3)=0)*
-                                IF(ISNUMBER({category_start_col}{row}:{category_end_col}{row}),{category_start_col}{row}:{category_end_col}{row},0),
-                                (MOD(COLUMN({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),3)=1)*
-                                IF(ISNUMBER({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),
-                                {category_start_plus1_col}{row}:{category_end_plus1_col}{row},0)
-                            )
-                        ),
-                        ""
-                    )"""
+                    # formula = f"""=IFERROR(
+                    #     IF(
+                    #         SUMPRODUCT(
+                    #             (MOD(COLUMN({category_start_col}{row}:{category_end_col}{row}),3)=0)*
+                    #             IF(ISNUMBER({category_start_col}{row}:{category_end_col}{row}),{category_start_col}{row}:{category_end_col}{row},0),
+                    #             (MOD(COLUMN({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),3)=1)*
+                    #             IF(ISNUMBER({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),
+                    #             {category_start_plus1_col}{row}:{category_end_plus1_col}{row},0)
+                    #         )=0,
+                    #         "",
+                    #         SUMPRODUCT(
+                    #             (MOD(COLUMN({category_start_col}{row}:{category_end_col}{row}),3)=0)*
+                    #             IF(ISNUMBER({category_start_col}{row}:{category_end_col}{row}),{category_start_col}{row}:{category_end_col}{row},0),
+                    #             (MOD(COLUMN({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),3)=1)*
+                    #             IF(ISNUMBER({category_start_plus1_col}{row}:{category_end_plus1_col}{row}),
+                    #             {category_start_plus1_col}{row}:{category_end_plus1_col}{row},0)
+                    #         )
+                    #     ),
+                    #     ""
+                    # )"""
 
-                    ws[f"{unit_rate_col}{row}"] = formula
-                    ws[f"{productivity_col}{row}"] = productivity_formula
+                    # ws[f"{unit_rate_col}{row}"] = formula
+                    cell = ws[f"{productivity_col}{row}"]
+                    cell.value = productivity_formula
+                    cell.data_type = 'f'
             except ValueError:
                 raise
 
